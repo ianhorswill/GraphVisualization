@@ -440,7 +440,7 @@ namespace GraphVisualization
         private void PushApart(GraphNode a, GraphNode b)
         {
             var offset = (a.Position - b.Position);
-            var force = (RepulsionGain / Mathf.Max(1,offset.sqrMagnitude)) * offset;
+            var force = Mathf.Max(0, Mathf.Log(RepulsionGain / Mathf.Max(1,offset.sqrMagnitude))) * offset;
 
             a.NetForce += force;
             b.NetForce -= force;
