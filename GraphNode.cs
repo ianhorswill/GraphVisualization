@@ -72,7 +72,7 @@ namespace GraphVisualization
             Key = key;
             Label = label;
             Style = style;
-            labelMesh = GetComponent<TMPro.TextMeshProUGUI>();
+            labelMesh = GetComponentInChildren<TMPro.TextMeshProUGUI>();
             if (labelMesh != null)
             {
                 labelMesh.text = label;

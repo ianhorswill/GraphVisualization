@@ -50,7 +50,7 @@ namespace GraphVisualization
             this.EndNode = endNode;
             this.Label = label;
             this.Style = style;
-            text = GetComponent<TMPro.TextMeshProUGUI>();
+            text = GetComponentInChildren<TMPro.TextMeshProUGUI>();
             if (text != null)
             {
                 text.text = label;
