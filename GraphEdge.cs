@@ -25,7 +25,6 @@
 
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
 
 namespace GraphVisualization
 {
@@ -39,7 +38,7 @@ namespace GraphVisualization
         public GraphNode EndNode;
         public string Label;
         public EdgeStyle Style;
-        private Text text;
+        private TMPro.TextMeshProUGUI text;
         private RectTransform rectTransform;
 
         /// <summary>
@@ -51,14 +50,13 @@ namespace GraphVisualization
             this.EndNode = endNode;
             this.Label = label;
             this.Style = style;
-            text = GetComponent<Text>();
+            text = GetComponent<TMPro.TextMeshProUGUI>();
             if (text != null)
             {
                 text.text = label;
-                if (style.Font != null)
-                    text.font = style.Font;
-                if (style.FontSize != 0)
-                    text.fontSize = style.FontSize;
+                if (style.Font != null) { text.font = style.Font; }
+                if (style.FontSize != 0) { text.fontSize = style.FontSize; }
+
                 text.fontStyle = style.FontStyle;
             }
 
@@ -82,10 +80,7 @@ namespace GraphVisualization
             rectTransform.localEulerAngles = new Vector3(0, 0, angle);
         }
 
-        public void Update()
-        {
-            UpdatePosition();
-        }
+        public void Update() => UpdatePosition();
 
         /// <summary>
         /// Called to adjust color of edge label when selected node in the graph changes.
@@ -93,13 +88,9 @@ namespace GraphVisualization
         /// </summary>
         public void SelectionChanged(Graph g, GraphNode selectedNode)
         {
-            if (text != null)
-                text.color =
-                    (selectedNode == null || StartNode == selectedNode || selectedNode
-                        ? 1
-                        : g.GreyOutFactor)
-                    * Style.Color
-                    ;
+            if (text == null) { return; }
+            bool greyout = selectedNode == null || StartNode == selectedNode || selectedNode;
+            text.color = Style.Color * (greyout ? 1 : g.GreyOutFactor);
         }
     }
 }

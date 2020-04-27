@@ -18,7 +18,7 @@ namespace GraphVisualization
         /// Color in which to draw the edge.
         /// </summary>
         [Tooltip("Color in which to render the edge")]
-        public Color Color = new Color(1,1,1);
+        public Color Color = new Color(1, 1, 1);
         /// <summary>
         /// Width of the line to draw, in pixels.
         /// </summary>
@@ -51,7 +51,7 @@ namespace GraphVisualization
         /// Font in which to draw label.
         /// </summary>
         [Tooltip("Font for label")]
-        public Font Font;
+        public TMPro.TMP_FontAsset Font;
         /// <summary>
         /// Point size in which to draw label.
         /// </summary>
@@ -66,7 +66,7 @@ namespace GraphVisualization
         /// The style in which to render the label.
         /// </summary>
         [Tooltip("FontStyle (e.g. italic) in which to render the label.")]
-        public FontStyle FontStyle = FontStyle.Normal;
+        public TMPro.FontStyles FontStyle = TMPro.FontStyles.Normal;
 
         /// <summary>
         /// Prefab to use for making edges
@@ -74,7 +74,7 @@ namespace GraphVisualization
         [Tooltip("Prefab to instantiate to make a new edge in this style, if different from the default in Graph.")]
         public GameObject Prefab;
 
-        
+
         /// <summary>
         /// Copy the style
         /// </summary>

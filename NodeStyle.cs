@@ -23,7 +23,7 @@ namespace GraphVisualization
         /// Font in which to draw label.
         /// </summary>
         [Tooltip("Font in which to render the node")]
-        public Font Font;
+        public TMPro.TMP_FontAsset Font;
         /// <summary>
         /// Point size in which to draw label.
         /// </summary>
@@ -33,7 +33,7 @@ namespace GraphVisualization
         /// The style in which to render the node's label.
         /// </summary>
         [Tooltip("Font style (e.g. italic) in which to render the node label.")]
-        public FontStyle FontStyle = FontStyle.Normal;
+        public TMPro.FontStyles FontStyle = TMPro.FontStyles.Normal;
 
         /// <summary>
         /// Prefab to use for making nodes

@@ -43,7 +43,7 @@ namespace GraphVisualization
         public NodeStyle Style;
         private RectTransform rectTransform;
         private Graph graph;
-        private Text labelMesh;
+        private TMPro.TextMeshProUGUI labelMesh;
 
         /// <summary>
         /// The current position as computed by the spring physics system in Graph.cs
@@ -72,7 +72,7 @@ namespace GraphVisualization
             Key = key;
             Label = label;
             Style = style;
-            labelMesh = GetComponent<Text>();
+            labelMesh = GetComponent<TMPro.TextMeshProUGUI>();
             if (labelMesh != null)
             {
                 labelMesh.text = label;
