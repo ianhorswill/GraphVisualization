@@ -86,6 +86,9 @@ namespace GraphVisualization
         /// </summary>
         [Tooltip("The strength of the force that moves non-adjacent nodes apart.  Set this to 0 to eliminate repulsion calculations.")]
         public float RepulsionGain = 100000;
+
+        public float SiblingRepulsionBoost = 5;
+
         /// <summary>
         /// Rate (0-1) at which nodes slow down when no forces are applied to them.
         /// </summary>
@@ -125,6 +128,7 @@ namespace GraphVisualization
         /// </summary>
         private readonly List<IEdgeDriver> edgeDrivers = new List<IEdgeDriver>();
         private readonly List<GraphEdge> edges = new List<GraphEdge>();
+        private readonly Dictionary<GraphNode, List<GraphNode>> adjacencyLists = new Dictionary<GraphNode, List<GraphNode>>();
 
         /// <summary>
         /// Mapping from client-side vertex objects ("keys") to internal GraphNode objects
@@ -135,6 +139,11 @@ namespace GraphVisualization
         /// Used to determine if nodes should repel one another, and if nodes should be dimmed when another node is selected.
         /// </summary>
         private readonly HashSet<(GraphNode, GraphNode)> adjacency = new HashSet<(GraphNode, GraphNode)>();
+
+        /// <summary>
+        /// The set of pairs of nodes that are siblings, i.e. that share a connection to the same node
+        /// </summary>
+        private HashSet<(GraphNode, GraphNode)> siblings;
 
         /// <summary>
         /// True if there is an edge from a to be *or* vice-versa.
@@ -275,9 +284,22 @@ namespace GraphVisualization
                 edgeDrivers.Add(driver);
             }
 
-            adjacency.Add((startNode, endNode));
-            adjacency.Add((endNode, startNode));
+            AddNeighbor(startNode, endNode);
+            AddNeighbor(endNode, startNode);
+
+            // force rebuild of siblings table
+            siblings = null;
         }
+
+        private void AddNeighbor(GraphNode startNode, GraphNode endNode)
+        {
+            adjacency.Add((startNode, endNode));
+            List<GraphNode> adjacencyList = null;
+            if (!adjacencyLists.TryGetValue(startNode, out adjacencyList))
+                adjacencyLists[startNode] = adjacencyList = new List<GraphNode>();
+            adjacencyList.Add(endNode);
+        }
+
         #endregion
 
         #region Unity message handlers
@@ -286,7 +308,31 @@ namespace GraphVisualization
         /// </summary>
         public void FixedUpdate()
         {
+            MakeSiblingsIfNecessary();
             UpdatePhysics();
+        }
+
+        /// <summary>
+        /// Creates/recreates the siblings table, which is a hashset of pairs of siblings.
+        /// </summary>
+        private void MakeSiblingsIfNecessary()
+        {
+            if (siblings != null)
+                return;
+
+            siblings = new HashSet<(GraphNode, GraphNode)>();
+            foreach (var pair in adjacencyLists)
+            {
+                var neighbors = pair.Value;
+                for (var i = 0 ; i < neighbors.Count; i++)
+                for (var j = i + 1; j < neighbors.Count; j++)
+                {
+                    var n1 = neighbors[i];
+                    var n2 = neighbors[j];
+                    siblings.Add((n1, n2));
+                    siblings.Add((n2, n1));
+                }
+            }
         }
 
         /// <summary>
@@ -391,7 +437,7 @@ namespace GraphVisualization
         void UpdatePhysics()
         {
             Rect bounds = rectTransform.rect;
-            targetEdgeLength = 1.5f * Mathf.Sqrt(bounds.width * bounds.height / nodes.Count);
+            targetEdgeLength = 1f * Mathf.Sqrt(bounds.width * bounds.height / nodes.Count);
 
             foreach (var n in nodes)
                 n.NetForce = Vector2.zero;
@@ -440,7 +486,8 @@ namespace GraphVisualization
         private void PushApart(GraphNode a, GraphNode b)
         {
             var offset = (a.Position - b.Position);
-            var force = Mathf.Max(0, Mathf.Log(RepulsionGain / Mathf.Max(1,offset.sqrMagnitude))) * offset;
+            var siblingGain = siblings.Contains((a, b)) ? SiblingRepulsionBoost : 1;
+            var force = Mathf.Max(0, siblingGain * Mathf.Log(RepulsionGain / Mathf.Max(1,offset.sqrMagnitude))) * offset;
 
             a.NetForce += force;
             b.NetForce -= force;
