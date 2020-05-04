@@ -486,8 +486,12 @@ namespace GraphVisualization
         private void PushApart(GraphNode a, GraphNode b)
         {
             var offset = (a.Position - b.Position);
-            var siblingGain = siblings.Contains((a, b)) ? SiblingRepulsionBoost : 1;
+            var areSiblings = siblings.Contains((a, b));
+            var siblingGain = areSiblings ? SiblingRepulsionBoost : 1;
             var force = Mathf.Max(0, siblingGain * Mathf.Log(RepulsionGain / Mathf.Max(1,offset.sqrMagnitude))) * offset;
+
+            if (!areSiblings && SelectedNode != null && SelectedNode.IsBeingDragged && (a == SelectedNode || b == SelectedNode))
+                force *= 100;
 
             a.NetForce += force;
             b.NetForce -= force;

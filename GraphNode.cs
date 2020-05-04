@@ -44,6 +44,7 @@ namespace GraphVisualization
         private RectTransform rectTransform;
         private Graph graph;
         private TMPro.TextMeshProUGUI labelMesh;
+        private Image image;
 
         /// <summary>
         /// The current position as computed by the spring physics system in Graph.cs
@@ -83,8 +84,20 @@ namespace GraphVisualization
                 labelMesh.fontStyle = style.FontStyle;
             }
 
+            image = GetComponentInChildren<Image>();
+            SetImageColor(Style.Color);
+
             rectTransform = GetComponent<RectTransform>();
             rectTransform.localPosition = PreviousPosition = position;
+        }
+
+        private void SetImageColor(Color color)
+        {
+            if (image != null)
+            {
+                color.a = 0.3f;
+                image.color = color;
+            }
         }
 
         public void Update()
@@ -102,7 +115,11 @@ namespace GraphVisualization
         public void SelectionChanged(Graph g, GraphNode selected)
         {
             if (labelMesh != null)
-                labelMesh.color = (Foreground ? 1 : graph.GreyOutFactor) * Style.Color;
+            {
+                var newColor = (Foreground ? 2 : graph.GreyOutFactor) * Style.Color;
+                labelMesh.color = newColor;
+                SetImageColor(newColor);
+            }
         }
 
         /// <summary>

@@ -58,6 +58,7 @@ namespace GraphVisualization
                 if (style.FontSize != 0) { text.fontSize = style.FontSize; }
 
                 text.fontStyle = style.FontStyle;
+                text.color = Style.Color;
             }
 
             rectTransform = GetComponent<RectTransform>();
@@ -89,8 +90,15 @@ namespace GraphVisualization
         public void SelectionChanged(Graph g, GraphNode selectedNode)
         {
             if (text == null) { return; }
-            bool greyout = selectedNode == null || StartNode == selectedNode || selectedNode;
-            text.color = Style.Color * (greyout ? 1 : g.GreyOutFactor);
+
+            var brightness = 1f;
+
+            if (selectedNode != null)
+            {
+                var highlight = StartNode == selectedNode || EndNode == selectedNode;
+                brightness = highlight ? 2 : g.GreyOutFactor;
+            }
+            text.color = Style.Color * brightness;
         }
     }
 }
