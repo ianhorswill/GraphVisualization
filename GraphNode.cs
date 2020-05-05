@@ -116,7 +116,10 @@ namespace GraphVisualization
         {
             if (labelMesh != null)
             {
-                var newColor = (Foreground ? 2 : graph.GreyOutFactor) * Style.Color;
+                var brightness = 1f;
+                if (graph.SelectedNode != null)
+                    brightness = Foreground ? 2 : graph.GreyOutFactor;
+                var newColor = brightness * Style.Color;
                 labelMesh.color = newColor;
                 SetImageColor(newColor);
             }
