@@ -109,7 +109,7 @@ namespace GraphVisualization
         /// Text object in which to display additional information about a node, or null if no info to be displayed.
         /// </summary>
         [Tooltip("Text object in which to display additional information about a node, or None if no info to be displayed.")]
-        public Text ToolTip;
+        public TMPro.TextMeshProUGUI ToolTip;
         /// <summary>
         /// Name of the string property of a selected node to be displayed in the ToolTop element.
         /// </summary>
@@ -406,7 +406,8 @@ namespace GraphVisualization
                 var key = node.Key;
                 var t = key.GetType();
                 var text = (string)t.InvokeMember(ToolTipProperty, BindingFlags.GetProperty, null, key, null);
-                ToolTip.text = text;
+                if (text != null)
+                    ToolTip.text = text;
             }
         }
 
