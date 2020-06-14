@@ -46,10 +46,10 @@ namespace GraphVisualization
         /// </summary>
         public void Initialize(Graph g, GraphNode startNode, GraphNode endNode, string label, EdgeStyle style)
         {
-            this.StartNode = startNode;
-            this.EndNode = endNode;
-            this.Label = label;
-            this.Style = style;
+            StartNode = startNode;
+            EndNode = endNode;
+            Label = label;
+            Style = style;
             text = GetComponentInChildren<TMPro.TextMeshProUGUI>();
             if (text != null)
             {
