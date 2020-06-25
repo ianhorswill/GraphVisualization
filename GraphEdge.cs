@@ -1,7 +1,7 @@
 ﻿#region Copyright
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="GraphEdge.cs" company="Ian Horswill">
-// Copyright (C) 2019 Ian Horswill
+// Copyright (C) 2019, 2020 Ian Horswill
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in the
@@ -85,7 +85,7 @@ namespace GraphVisualization
 
         /// <summary>
         /// Called to adjust color of edge label when selected node in the graph changes.
-        /// When there is a selected node, edges not adjacent to it are greyed out.
+        /// When there is a selected node, edges not adjacent to it are grayed out.
         /// </summary>
         public void SelectionChanged(Graph g, GraphNode selectedNode)
         {

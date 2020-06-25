@@ -1,7 +1,7 @@
 ﻿#region Copyright
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="Graph.cs" company="Ian Horswill">
-// Copyright (C) 2019 Ian Horswill
+// Copyright (C) 2019, 2020 Ian Horswill
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of
 // this software and associated documentation files (the "Software"), to deal in the
@@ -294,8 +294,7 @@ namespace GraphVisualization
         private void AddNeighbor(GraphNode startNode, GraphNode endNode)
         {
             adjacency.Add((startNode, endNode));
-            List<GraphNode> adjacencyList = null;
-            if (!adjacencyLists.TryGetValue(startNode, out adjacencyList))
+            if (!adjacencyLists.TryGetValue(startNode, out var adjacencyList))
                 adjacencyLists[startNode] = adjacencyList = new List<GraphNode>();
             adjacencyList.Add(endNode);
         }
