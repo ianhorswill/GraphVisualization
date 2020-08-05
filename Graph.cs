@@ -406,7 +406,7 @@ namespace GraphVisualization
                 var t = key.GetType();
                 var text = (string)t.InvokeMember(ToolTipProperty, BindingFlags.GetProperty, null, key, null);
                 if (text != null)
-                    ToolTip.text = text;
+                    ToolTip.text = text.Trim();
             }
         }
 
